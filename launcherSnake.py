@@ -3,6 +3,7 @@ def gameSnake(totalPositions, boxWidth, marginSprites, speed):
     from os import path
     from random import randint
     from time import sleep
+    global isResizable
     #Initial variables
     pygame.init()
     pygame.display.set_caption("Snake")
@@ -12,7 +13,10 @@ def gameSnake(totalPositions, boxWidth, marginSprites, speed):
     font = pygame.font.Font(None, 50)
     running = True
     margin = {"up" : 30, "right" : 20, "down" : 20, "left" : 20}
-    screen = pygame.display.set_mode((boxWidth * totalPositions + margin["left"] + margin["right"], boxWidth * totalPositions + margin["up"] + margin["down"]), pygame.RESIZABLE)
+    if isResizable == "s":
+        screen = pygame.display.set_mode((boxWidth * totalPositions + margin["left"] + margin["right"], boxWidth * totalPositions + margin["up"] + margin["down"]), pygame.RESIZABLE)
+    else:
+        screen = pygame.display.set_mode((boxWidth * totalPositions + margin["left"] + margin["right"], boxWidth * totalPositions + margin["up"] + margin["down"]))
     #Define variables
     points = 0
     positions = {}
@@ -69,11 +73,11 @@ def gameSnake(totalPositions, boxWidth, marginSprites, speed):
         #Draw sprites
         screen.fill("black")
         screen.blit(pointsText, centerPoints)
-        screen.blit(startText, centerStart)
-        pygame.draw.line(screen, "white", (margin["left"], margin["up"]), (screen.get_width() - margin["right"], margin["up"]), 2) #Top
-        pygame.draw.line(screen, "white", (screen.get_width() - margin["right"], margin["up"]), (screen.get_width() - margin["right"], screen.get_height() - margin["down"]), 2) #Right
-        pygame.draw.line(screen, "white", (screen.get_width() - margin["right"], screen.get_height() - margin["down"]), (margin["left"], screen.get_height() - margin["down"]), 2) #Down
-        pygame.draw.line(screen, "white", (margin["left"], screen.get_height() - margin["down"]), (margin["left"], margin["up"]), 2) #Left
+        screen.blit(startText, centerStart) 
+        pygame.draw.line(screen, "white", (margin["left"], margin["up"]), (margin["left"] + (boxWidth * totalPositions), margin["up"]), 2) #Up
+        pygame.draw.line(screen, "white", (margin["left"] + (boxWidth * totalPositions), margin["up"]), (margin["left"] + (boxWidth * totalPositions), margin["up"] + (boxWidth * totalPositions)), 2) #Right
+        pygame.draw.line(screen, "white", (margin["left"] + (boxWidth * totalPositions), margin["up"] + (boxWidth * totalPositions)), (margin["left"], margin["up"] + (boxWidth * totalPositions)), 2) #Down
+        pygame.draw.line(screen, "white", (margin["left"], margin["up"] + (boxWidth * totalPositions)), (margin["left"], margin["up"]), 2) #Left
         snake = pygame.draw.rect(screen, "white", (positionSnake.x + marginSprites, positionSnake.y + marginSprites, boxWidth - marginSprites * 2, boxWidth - marginSprites * 2))
         #Update screen
         pygame.display.flip()
@@ -122,10 +126,10 @@ def gameSnake(totalPositions, boxWidth, marginSprites, speed):
             screen.fill("black")
             pointsText = font.render(str(points), 1, "white")
             screen.blit(pointsText, centerPoints)
-            pygame.draw.line(screen, "white", (margin["left"], margin["up"]), (screen.get_width() - margin["right"], margin["up"]), 2)
-            pygame.draw.line(screen, "white", (screen.get_width() - margin["right"], margin["up"]), (screen.get_width() - margin["right"], screen.get_height() - margin["down"]), 2)
-            pygame.draw.line(screen, "white", (screen.get_width() - margin["right"], screen.get_height() - margin["down"]), (margin["left"], screen.get_height() - margin["down"]), 2)
-            pygame.draw.line(screen, "white", (margin["left"], screen.get_height() - margin["down"]), (margin["left"], margin["up"]), 2)
+            pygame.draw.line(screen, "white", (margin["left"], margin["up"]), (margin["left"] + (boxWidth * totalPositions), margin["up"]), 2) #Up
+            pygame.draw.line(screen, "white", (margin["left"] + (boxWidth * totalPositions), margin["up"]), (margin["left"] + (boxWidth * totalPositions), margin["up"] + (boxWidth * totalPositions)), 2) #Right
+            pygame.draw.line(screen, "white", (margin["left"] + (boxWidth * totalPositions), margin["up"] + (boxWidth * totalPositions)), (margin["left"], margin["up"] + (boxWidth * totalPositions)), 2) #Down
+            pygame.draw.line(screen, "white", (margin["left"], margin["up"] + (boxWidth * totalPositions)), (margin["left"], margin["up"]), 2) #Left
             snake = pygame.draw.rect(screen, "white", (positionSnake.x + marginSprites, positionSnake.y + marginSprites, boxWidth - marginSprites * 2, boxWidth - marginSprites * 2))
             apple = pygame.draw.rect(screen, "red", (positionApple.x + marginSprites, positionApple.y + marginSprites, boxWidth - marginSprites * 2, boxWidth - marginSprites * 2))
             for bodiePosition in range(0, len(positionBodies)):
@@ -221,6 +225,7 @@ def launcher():
     root.mainloop()
 
 if __name__ == "__main__":
+    isResizable = input("Will it be resizable (S/n)? ").lower()
     hasTkinter = input("Is tkinter installed (S/n)? ").lower()
     if hasTkinter == "s":
         launcher()
