@@ -1,0 +1,1 @@
+This is a very simple game made using pygame and tkinter, but tkinter is optional.
