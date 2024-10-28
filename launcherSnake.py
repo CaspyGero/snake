@@ -230,5 +230,8 @@ if __name__ == "__main__":
     if hasTkinter == "s":
         launcher()
     else:
-        print("Launching in base config")
-        gameSnake(15, 32, 2, 7)
+        totalPositions = int(input("Total positions: "))
+        boxWidth = int(input("Box width: "))
+        maginSprite = int(input("Sprites margin: "))
+        speed = int(input("Speed: "))
+        gameSnake(totalPositions, boxWidth, maginSprite, speed)
